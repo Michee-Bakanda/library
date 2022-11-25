@@ -1,21 +1,44 @@
+import { Switch, Route } from 'react-router-dom';
+import {useContext} from 'react'
 
-import './App.css';
-import AddBook from './components/AddBook';
-import BooksList from './components/BooksList';
-import { useState } from "react";
+import Layout from './components/Layout/Layout';
+import UserProfile from './components/Profile/UserProfile';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
+import AuthContext from './store/auth-context';
+import { Redirect } from 'react-router-dom';
+import Books from './pages/Books'
 
 function App() {
-  const [bookId,setBookId] = useState("")
 
-  const getBookIdHandler = (id)=>{
-    setBookId(id)
-    console.log(bookId)
-  }
+  const authCtx = useContext(AuthContext)
+
   return (
-    <div className="App">
-      <AddBook/>
-      <BooksList getBookId={getBookIdHandler} />
-    </div>
+    <Layout>
+      <Switch>
+        <Route path='/' exact>
+          <HomePage />
+        </Route>
+        {!authCtx.isLoggedIn &&(
+          <Route path='/auth'>
+          <AuthPage />
+        </Route>
+        )}
+        {authCtx.isLoggedIn &&(
+          <Route path='/profile'>
+          <UserProfile />
+        </Route>
+        )}
+         {authCtx.isLoggedIn &&(
+          <Route path='/books'>
+          <Books/>
+        </Route>
+        )}
+        <Route path='*'>
+          <Redirect to='/'/>
+        </Route>
+      </Switch>
+    </Layout>
   );
 }
 
