@@ -11,10 +11,17 @@ const Books = () => {
       console.log(bookId)
     }
   return (
-    <>
+    <div className='container'>
+      <div style={{
+        background:"white",
+        padding:"20px",
+        // width:"165px"
+      }}>
       <AddBook/>
       <BooksList getBookId={getBookIdHandler} />
-    </>
+
+      </div>
+    </div>
   )
 }
 
