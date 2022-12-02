@@ -95,7 +95,7 @@ const AddBook = ({ id, setBookId }) => {
             <input
               style={{ padding: "12px", width: "70%" }}
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value.trim())}
             />
           </div>
           <div
@@ -117,7 +117,7 @@ const AddBook = ({ id, setBookId }) => {
             <input
               style={{ padding: "12px", width: "70%" }}
               value={author}
-              onChange={(e) => setAuthor(e.target.value)}
+              onChange={(e) => setAuthor(e.target.value.trim())}
             />
           </div>
         </div>
