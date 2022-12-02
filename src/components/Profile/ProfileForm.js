@@ -28,7 +28,6 @@ const ProfileForm = () => {
         'Content-Type': 'application/json'
       }
     }).then(res =>{
-      // always works
       history.replace('/')
       
     })
