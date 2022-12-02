@@ -15,9 +15,13 @@ const Books = () => {
       <div style={{
         background:"white",
         padding:"20px",
-        // width:"165px"
+        width:"50%",
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"center"
       }}>
-      <AddBook/>
+      <AddBook id={bookId} setBookId={setBookId}/>
       <BooksList getBookId={getBookIdHandler} />
 
       </div>

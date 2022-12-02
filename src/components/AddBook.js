@@ -1,62 +1,186 @@
-import React from 'react'
-import { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import BookDataService from "../services/book-services";
 
-const AddBook = () => {
-
+const AddBook = ({ id, setBookId }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [status, setStatus] = useState("Available");
   const [flag, setFlag] = useState(true);
   const [message, setMessage] = useState({ error: false, msg: "" });
 
-  const handleSubmit =async(e)=>{
-    e.preventDefault()
-    setMessage("")
-    if(title ==="" || author === "" ){
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    if (title === "" || author === "") {
       setMessage({ error: true, msg: "All fields are mendatory !" });
+      alert("all fields must have values!");
+      return;
     }
-    const newBook={
+    const newBook = {
       title,
       author,
-      status
-    }
+      status,
+    };
 
-    console.log(newBook)
-
+    console.log(newBook);
     try {
-      await BookDataService.addBooks(newBook)
-      setMessage({ error: false, msg: "Added successfully" });
-    } catch (error) {
-      setMessage({ error: true, msg: error.msg});
+      if (id !== undefined && id !== "") {
+        await BookDataService.updateBook(id, newBook);
+        setBookId("");
+        setMessage({ error: false, msg: "Updated successfully!" });
+      } else {
+        await BookDataService.addBooks(newBook);
+        setMessage({ error: false, msg: "New Book added successfully!" });
+      }
+    } catch (err) {
+      setMessage({ error: true, msg: err.message });
     }
 
-    setTitle("")
-    setAuthor("")
-    
-  }
+    setTitle("");
+    setAuthor("");
+  };
+
+  const editHandler = async () => {
+    setMessage("");
+    try {
+      const docSnap = await BookDataService.getBook(id);
+      setAuthor(docSnap.data().author);
+      setTitle(docSnap.data().title);
+      setStatus(docSnap.data().status);
+    } catch (error) {
+      setMessage({ error: true, msg: error.message });
+    }
+  };
+
+  useEffect(() => {
+    console.log("here is the id", id);
+    if (id !== undefined && id !== "") {
+      editHandler();
+    }
+  }, [id]);
 
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
       <form onSubmit={handleSubmit}>
-          <div>
-            <h1>Title</h1>
-            <input value={title} onChange={(e)=>setTitle(e.target.value)}/>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <h1
+              style={{
+                margin: "5px 0px 5px 0px",
+              }}
+            >
+              Title
+            </h1>
+            <input
+              style={{ padding: "12px", width: "70%" }}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </div>
-          <div>
-            <h1>Author</h1>
-            <input value={author} onChange={(e)=>setAuthor(e.target.value)}/>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <h1
+              style={{
+                margin: "5px 0px 5px 0px",
+              }}
+            >
+              Author
+            </h1>
+            <input
+              style={{ padding: "12px", width: "70%" }}
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
           </div>
-          <div>
-            <button>Not available</button>
-            <button>available</button>
-          </div>
-          <div>
-            <button>ADD</button>
-          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: "8px",
+          }}
+        >
+          <button
+            disabled={flag}
+            style={{
+              background: "green",
+              color: "white",
+              border: "none",
+              padding: "12px",
+            }}
+            onClick={(e) => {
+              setStatus("Available");
+              setFlag(true);
+            }}
+            className="form-btn"
+          >
+            Available
+          </button>
+          <button
+            style={{
+              background: "red",
+              color: "white",
+              border: "none",
+              padding: "12px",
+            }}
+            disabled={!flag}
+            onClick={(e) => {
+              setStatus("Not Available");
+              setFlag(false);
+            }}
+            className="form-btn"
+          >
+            Not Available
+          </button>
+        </div>
+        <div
+          style={{
+            marginTop: "8px",
+          }}
+        >
+          <button
+            style={{
+              background: "blue",
+              color: "white",
+              border: "none",
+              padding: "12px",
+            }}
+            type="Submit"
+            className="form-btn"
+          >
+            ADD/UPDATE
+          </button>
+        </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default AddBook
+export default AddBook;

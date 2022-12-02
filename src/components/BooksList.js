@@ -21,13 +21,29 @@ const BooksList = ({ getBookId }) => {
   return (
     <>
       <div className="mb-2">
-        <button variant="dark edit" onClick={getBooks}>
+        <button
+          style={{
+            background: "gray",
+            color: "white",
+            border: "none",
+            padding: "12px",
+            marginBottom: "8px",
+          }}
+          variant="dark edit"
+          onClick={getBooks}
+          className="form-btn"
+        >
           Refresh List
         </button>
       </div>
 
       {/* <pre>{JSON.stringify(books, undefined, 2)}</pre>} */}
-      <table>
+      <table
+        style={{
+          border: "1px black solid",
+          maginTop: "8px",
+        }}
+      >
         <thead>
           <tr>
             <th>#</th>
@@ -37,15 +53,52 @@ const BooksList = ({ getBookId }) => {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody
+          style={{
+            border: "1px black solid",
+          }}
+        >
           {books.map((doc, index) => {
             return (
               <tr key={doc.id}>
-                <td>{index + 1}</td>
-                <td>{doc.title}</td>
-                <td>{doc.author}</td>
-                <td>{doc.status}</td>
-                <td>
+                <td
+                  style={{
+                    border: "1px black solid",
+                    padding: "8px",
+                  }}
+                >
+                  {index + 1}
+                </td>
+                <td
+                  style={{
+                    border: "1px black solid",
+                    padding: "8px",
+                  }}
+                >
+                  {doc.title}
+                </td>
+                <td
+                  style={{
+                    border: "1px black solid",
+                    padding: "8px",
+                  }}
+                >
+                  {doc.author}
+                </td>
+                <td
+                  style={{
+                    border: "1px black solid",
+                    padding: "8px",
+                  }}
+                >
+                  {doc.status}
+                </td>
+                <td
+                  style={{
+                    border: "1px black solid",
+                    padding: "8px",
+                  }}
+                >
                   <button
                     variant="secondary"
                     className="edit"
